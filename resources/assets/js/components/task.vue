@@ -14,8 +14,8 @@
                     <i class="glyphicon glyphicon-plus"></i>Add Task
                 </span>
             <ul class="list-group mt-10">
-                <li class="list-group-item">
-                    First Item
+                <li class="list-group-item" v-for="task in list">
+                    <span>{{ task.list_item }}</span>
                     <span class="pull-right" style="margin-top:-3px;">
                     <span class="glyphicon glyphicon-pencil pad-10" @click="editTask"></span>
                     <span class="glyphicon glyphicon-trash pad-10"></span>
@@ -102,6 +102,7 @@
 
 		created(){
 
+        this.getlist();
 
 		},
 
@@ -127,6 +128,13 @@
 
             showComplete(){
                 $('#show-complete').toggle();
+            },
+
+            getlist(){
+                this.$http.get('/api/task')
+                          .then(response => {
+                            this.list = response.data;
+                          });
             }
 		}
 	}
