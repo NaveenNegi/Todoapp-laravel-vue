@@ -43,16 +43,21 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title">Add Todo Task</h4>
                       </div>
+
+                      <form>
                       <div class="modal-body">
                           <div class="col-md-12" style="margin-bottom:10px;">
                               <label>Task Name:-</label>
-                              <input type="text" class="form-control">
+                              <input type="text" class="form-control" v-model="createForm.item">
                           </div>
                       </div>
+                      </form>
+
                       <div class="modal-footer" style="margin-top:10px;">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-primary" @click="saveTask">Save</button>
                       </div>
+                      
                     </div><!-- /.modal-content -->
                   </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
@@ -135,6 +140,31 @@
                           .then(response => {
                             this.list = response.data;
                           });
+            },
+
+            saveTask(){
+              this.persists('post','/api/addtask',
+                            this.createForm,'#add-task'
+              );
+            },
+
+            persists(method,uri,form,popup){
+            
+              this.$http[method](uri,form)
+                .then(response =>{
+                      form.item   = '';
+                      form.errors = [];
+                      $(popup).modal('hide');
+                      this.getlist();
+                })
+                .catch(response =>{
+                    if(typeof response.data === 'object'){
+                        form.errors   = _.flatten(_.toArray(response.data));
+                    }else{
+                        form.errors    = ['Something went worng. Please try again'];
+                    }
+                });
+            
             }
 		}
 	}
