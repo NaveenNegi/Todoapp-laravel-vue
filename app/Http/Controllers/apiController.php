@@ -17,7 +17,11 @@ use Validator;
 class apiController extends Controller
 {
     public function index(){
-    	return Taskitem::get();
+
+    	$data  		=	array();
+    	$data['list']	=	Taskitem::where('complete','=', 0)->get();
+    	$data['complete'] =	Taskitem::where('complete', '=', 1)->get();
+    	return $data;
 
     }
 
@@ -51,6 +55,13 @@ class apiController extends Controller
     	}
 
     	return Response::json();
+    }
 
+    public function complete($complete_id,Request $request){
+
+    	$completeTask 		=	Taskitem::where('id',$complete_id)->update([
+    			'complete' 	=> 	1
+    		]);
+    	return Response::json();
     }
 }
