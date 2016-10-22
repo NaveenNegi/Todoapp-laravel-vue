@@ -17,8 +17,8 @@
                 <li class="list-group-item" v-for="task in list">
                     <span>{{ task.list_item }}</span>
                     <span class="pull-right" style="margin-top:-3px;">
-                    <span class="glyphicon glyphicon-pencil pad-10" @click="editTask(task)"></span>
-                    <span class="glyphicon glyphicon-trash pad-10"></span>
+                    <a href="#"><span class="glyphicon glyphicon-pencil pad-10" @click="editTask(task)"></span></a>
+                    <a href="#"><span class="glyphicon glyphicon-trash pad-10" @click="deleteTask(task)"></span></a>
                     </span>
                 </li>
             </ul>
@@ -148,6 +148,15 @@
               this.persists('put','/api/updatetask/'+this.editForm.id,
                             this.editForm,'#edit-task'
               );
+            },
+
+            deleteTask(task){
+                if(confirm("Are you sure..! You want to delete this task")){
+                      this.$http.delete('/api/delete-task/'+task.id)
+                        .then(response =>{
+                            this.getlist();
+                        });
+                }
             },
 
             persists(method,uri,form,popup){

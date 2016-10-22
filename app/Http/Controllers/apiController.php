@@ -42,4 +42,15 @@ class apiController extends Controller
     	return Response::json($updateTask);
 
     }
+
+    public function delete($delete_id,Request $request){
+
+    	$delete_task 	=	Taskitem::where('id',$delete_id)->first();
+    	if($delete_task){
+    		$delete 	=	$delete_task->delete();
+    	}
+
+    	return Response::json();
+
+    }
 }
