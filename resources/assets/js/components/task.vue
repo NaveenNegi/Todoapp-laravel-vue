@@ -27,9 +27,9 @@
                 <div class="mt-10" id="show-complete" style="display:none;">
                     <ul class="list-group">
                         <li class="list-group-item" v-for="task in complete">
-                            <span class="complete">{{ task.list_item }}</span>
+                            <span class="complete" @click="uncompleteTask(task)">{{ task.list_item }}</span>
                             <span class="pull-right" style="margin-top:-3px;">
-                                <span class="glyphicon glyphicon-trash pad-10"></span>
+                                <span class="glyphicon glyphicon-trash pad-10" @click="deleteTask(task)"></span>
                             </span> 
                         </li>
                     </ul>
@@ -165,6 +165,13 @@
             completeTask(task){
                 this.$http.get('/api/complete-task/'+ task.id)
                   .then(response =>{
+                      this.getlist();
+                  });
+            },
+
+            uncompleteTask(task){
+                this.$http.put('api/uncomplete/'+ task.id)
+                  .then(response => {
                       this.getlist();
                   });
             },
