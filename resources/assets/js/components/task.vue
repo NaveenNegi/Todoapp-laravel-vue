@@ -15,7 +15,7 @@
                 </span>
             <ul class="list-group mt-10">
                 <li class="list-group-item" v-for="task in list">
-                    <span>{{ task.list_item }}</span>
+                    <span @click="completeTask(task)">{{ task.list_item }}</span>
                     <span class="pull-right" style="margin-top:-3px;">
                     <a href="#"><span class="glyphicon glyphicon-pencil pad-10" @click="editTask(task)"></span></a>
                     <a href="#"><span class="glyphicon glyphicon-trash pad-10" @click="deleteTask(task)"></span></a>
@@ -26,8 +26,8 @@
                 <button class="btn btn-primary" @click="showComplete">Show Completed Task</button>
                 <div class="mt-10" id="show-complete" style="display:none;">
                     <ul class="list-group">
-                        <li class="list-group-item">
-                            <span class="complete">First Task</span>
+                        <li class="list-group-item" v-for="task in complete">
+                            <span class="complete">{{ task.list_item }}</span>
                             <span class="pull-right" style="margin-top:-3px;">
                                 <span class="glyphicon glyphicon-trash pad-10"></span>
                             </span> 
@@ -96,6 +96,7 @@
 		data(){
 			return{
 				list:[],
+        complete:[],
 				createForm: {
                     item: '',
                     errors: []
@@ -134,7 +135,9 @@
             getlist(){
                 this.$http.get('/api/task')
                           .then(response => {
-                            this.list = response.data;
+                            this.list = response.data['list'];
+                            this.complete = response.data['complete'];
+
                           });
             },
 
@@ -157,6 +160,13 @@
                             this.getlist();
                         });
                 }
+            },
+
+            completeTask(task){
+                this.$http.get('/api/complete-task/'+ task.id)
+                  .then(response =>{
+                      this.getlist();
+                  });
             },
 
             persists(method,uri,form,popup){
