@@ -64,4 +64,13 @@ class apiController extends Controller
     		]);
     	return Response::json();
     }
+
+    public function unComplete($task_id,Request $request){
+
+    	$unComplete 	=	Taskitem::where('id',$task_id)->update([
+    		'complete' 	=>	0
+    	]);
+
+    	return Response::json();
+    }
 }
