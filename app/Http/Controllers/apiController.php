@@ -31,4 +31,15 @@ class apiController extends Controller
     	return Response::json();
     	
     }
+
+    public function update($edit_id,Request $request){
+
+    	$task_item 				=	$request->item;
+
+    	$updateTask 			=	Taskitem::where('id',$edit_id)->update([
+    				'list_item' => 	$request->item
+    		]);
+    	return Response::json($updateTask);
+
+    }
 }

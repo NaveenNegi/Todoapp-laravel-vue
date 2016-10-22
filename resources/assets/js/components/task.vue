@@ -17,7 +17,7 @@
                 <li class="list-group-item" v-for="task in list">
                     <span>{{ task.list_item }}</span>
                     <span class="pull-right" style="margin-top:-3px;">
-                    <span class="glyphicon glyphicon-pencil pad-10" @click="editTask"></span>
+                    <span class="glyphicon glyphicon-pencil pad-10" @click="editTask(task)"></span>
                     <span class="glyphicon glyphicon-trash pad-10"></span>
                     </span>
                 </li>
@@ -70,15 +70,17 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title">Edit Todo Task</h4>
                       </div>
+                      <form>
                       <div class="modal-body">
                           <div class="col-md-12" style="margin-bottom:10px;">
                               <label>Task Name:-</label>
-                              <input type="text" class="form-control">
+                              <input type="text" class="form-control" v-model="editForm.item">
                           </div>
                       </div>
+                      </form>
                       <div class="modal-footer" style="margin-top:10px;">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-primary" @click="updateItem">Update</button>
                       </div>
                     </div><!-- /.modal-content -->
                   </div><!-- /.modal-dialog -->
@@ -117,16 +119,10 @@
             	$('#add-task').modal('show');
             },
 
-            saveTask(){
-                this.persistTask(
-                		'post','/api/addtask',
-                		'#add-task', this.createForm
-                );
-            },
 
             editTask(task) {
             	this.editForm.id 	=	task.id;
-            	this.editForm.item 	=	task.item;
+            	this.editForm.item 	=	task.list_item;
 
             	$('#edit-task').modal('show');
             },
@@ -145,6 +141,12 @@
             saveTask(){
               this.persists('post','/api/addtask',
                             this.createForm,'#add-task'
+              );
+            },
+
+            updateItem(){
+              this.persists('put','/api/updatetask/'+this.editForm.id,
+                            this.editForm,'#edit-task'
               );
             },
 
