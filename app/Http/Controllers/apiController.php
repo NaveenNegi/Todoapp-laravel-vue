@@ -73,4 +73,18 @@ class apiController extends Controller
 
     	return Response::json();
     }
+
+    public function clearAll(){
+
+        $clearcompleted     =   Taskitem::where('complete','=',1)->get();
+        if(count($clearcompleted)>0){
+
+            foreach($clearcompleted as $complete){
+                 $deleteAll      =   $complete->delete();
+            }
+           
+        }
+
+        return Response::json();
+    }
 }
