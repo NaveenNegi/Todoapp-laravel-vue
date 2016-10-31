@@ -23,6 +23,8 @@
                 </li>
             </ul>
             <div>
+            <div class="col-lg-12 col-md-12 col-sm-12" v-if="complete.length">
+              <div class="row">
                 <button class="btn btn-primary" @click="showComplete">Show Completed Task</button>
                 <div class="mt-10" id="show-complete" style="display:none;">
                     <ul class="list-group">
@@ -33,7 +35,11 @@
                             </span> 
                         </li>
                     </ul>
+                <button @click="clearCompleted" class="btn btn-danger">clear completed</button>
                 </div>
+                </div>
+              </div>
+
 
                 <!-- Add Task Modal -->
                 <div class="modal fade" tabindex="-1" role="dialog" id="add-task">
@@ -193,6 +199,13 @@
                     }
                 });
             
+            },
+
+            clearCompleted(){
+                this.$http.get('api/clearcompleted')
+                .then(response => {
+                    this.getlist();
+                });
             }
 		}
 	}
